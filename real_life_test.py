@@ -1,9 +1,12 @@
-from data_collection import actions
 from draw_holistic_and_extract_points import *
 import numpy as np
 import cv2
 from keras.models import load_model
 
+
+actions = np.array(['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н',
+                    'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь',
+                    'Э', 'Ю', 'Я'])
 model = load_model('rsl_model4.h5')
 # colors = [(245, 117, 16), (117, 245, 16), (16, 117, 245)]
 #
