@@ -31,10 +31,7 @@ def draw_styled_landmarks_specified(image, results):
 
 
 def extract_keypoints_1hand(results):
-    if results.left_hand_landmarks:
-        hlm = np.array([[res.x, res.y, res.z] for res in
-                   results.left_hand_landmarks.landmark]).flatten()
-    elif results.right_hand_landmarks:
+    if results.right_hand_landmarks:
         hlm = np.array([[res.x, res.y, res.z] for res in
                    results.right_hand_landmarks.landmark]).flatten()
     else:
