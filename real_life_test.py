@@ -48,21 +48,6 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
             sequence.append(keypoints)
             sequence = sequence[-30:]
 
-            if len(sequence) == 30:
-                x_ = []
-                y_ = []
-                for landmark in sequence:
-                    x_1 = [value for key, value in enumerate(landmark, 1) if key % 3 != 0]
-                    x_x = [value for key, value in enumerate(x_1, 1) if key % 3 != 0]
-                    y_y = [value for key, value in enumerate(x_, 1) if key % 2 != 0]
-                    x_ = np.concatenate([x_, x_x])
-                    y_ = np.concatenate([y_, y_y])
-
-                x1 = int(min(x_) * W)
-                y1 = int(min(y_) * H)
-                x2 = int(max(x_) * W) - 20
-                y2 = int(max(y_) * H) - 20
-
                 res = model.predict(np.expand_dims(sequence, axis=0))[0]
                 print(actions[np.argmax(res)] + ' ' + str(max(res)))
                 predictions.append(np.argmax(res))
@@ -76,30 +61,24 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
                                 sentence.append(actions[np.argmax(res)])
                         else:
                             sentence.append(str(actions[np.argmax(res)]))
-                #
+                
                 if len(sentence) > 5:
                     sentence = sentence[-5:]
 
                 # Viz probabilities
                 # image = prob_viz(res, dataCollection.actions, image, colors)
 
-                cv2.rectangle(image, (0, 0), (640, 640), (39, 40, 40), 1)
-                cv2.putText(image, sentence, (3, 30),
-                            cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
-                # if len(sentence) > 0:
-                #     to_print = str(sentence[-1]) + ' ' + str(max(res))
-                #     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 2)
-                #     cv2.putText(image, to_print, (x1, y1),
-                #                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
-                # else:
-                #     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 2)
-                #     cv2.putText(image, ''.join(sentence), (x1, y1),
-                #                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.rectangle(image, (0, 0), (640, 40), (40, 40, 40), 1)
+                cv2.putText(image, ' '.join(sentence), (3, 30),
+                            cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         # Show to screen
         cv2.imshow('OpenCV Feed', image)
 
-        if cv2.waitKey(10) & 0xFF == ord('q'):
+        k = cv2.waitKey(1)
+        if k % 256 == 27:
+            # ESC pressed
+            print("Escape hit, closing...")
             break
 
     cap.release()
