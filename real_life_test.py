@@ -34,7 +34,6 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
         # Read feed
         ret, frame = cap.read()
         H, W, _ = frame.shape
-        print(str(H) + ' ' + str(W))
 
         # Make detections
         image, results = mediapipe_detection(frame, holistic)
@@ -78,24 +77,24 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
                         else:
                             sentence.append(str(actions[np.argmax(res)]))
                 #
-                # if len(sentence) > 5:
-                #     sentence = sentence[-5:]
+                if len(sentence) > 5:
+                    sentence = sentence[-5:]
 
                 # Viz probabilities
                 # image = prob_viz(res, dataCollection.actions, image, colors)
 
-                # cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 1)
-                # cv2.putText(image, str(sentence[-1]), (x1, y1),
-                #             cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
-                if len(sentence) > 0:
-                    to_print = str(sentence[-1]) + ' ' + str(max(res))
-                    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 2)
-                    cv2.putText(image, to_print, (x1, y1),
-                                cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
-                else:
-                    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 2)
-                    cv2.putText(image, ''.join(sentence), (x1, y1),
-                                cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.rectangle(image, (0, 0), (640, 640), (39, 40, 40), 1)
+                cv2.putText(image, sentence, (3, 30),
+                            cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+                # if len(sentence) > 0:
+                #     to_print = str(sentence[-1]) + ' ' + str(max(res))
+                #     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 2)
+                #     cv2.putText(image, to_print, (x1, y1),
+                #                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
+                # else:
+                #     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 0), 2)
+                #     cv2.putText(image, ''.join(sentence), (x1, y1),
+                #                 cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 3, cv2.LINE_AA)
 
         # Show to screen
         cv2.imshow('OpenCV Feed', image)
